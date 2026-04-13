@@ -57,6 +57,46 @@ std::string slurp_file(char* path)
     return contents.str();
 }
 
+std::vector<std::string> tokenize(std::string file)
+{
+    std::vector<std::string> out;
+    std::string buffer = "";
+
+    for ( char c : file )
+    {
+        if (c == ' ' || c == '\n' || c == '\t')
+        {
+            if (buffer != "")
+            {
+                out.push_back(buffer);
+                buffer = "";
+            }
+        }
+        else buffer += c;
+    }
+
+    if (buffer != "")
+    {
+        out.push_back(buffer);
+        buffer = "";
+    }
+
+    return out;
+}
+
+machine parse_rules(std::string file)
+{
+    std::vector<std::string> tokens = tokenize(file);
+
+    for (size_t i = 0; i < tokens.size();)
+    {
+        if (tokens[i] == "ALPHABET")
+        {
+
+        }
+    }
+}
+
 int main(int argc, char** argv)
 {
     if (argc == 1)
