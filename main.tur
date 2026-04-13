@@ -1,0 +1,38 @@
+ALPHABET 0 1
+INPUTS 0
+BLANK 0
+
+STATES A B C HALT
+START A
+END HALT
+
+RULE
+    A:
+        1:
+            WRITE 1
+            MOVE L
+            STATE C
+        0:
+            WRITE 1
+            MOVE R
+            STATE B
+RULE
+    B:
+        1:
+            WRITE 1
+            MOVE R
+            STATE B
+        0:
+            WRITE 1
+            MOVE L
+            STATE A
+RULE
+    C:
+        1:
+            WRITE 1
+            MOVE R
+            STATE HALT
+        0:
+            WRITE 1
+            MOVE L
+            STATE B
