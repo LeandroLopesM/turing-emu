@@ -1,3 +1,5 @@
+#include <cstdarg>
+#include <cstdio>
 #include <fstream>
 #include <iostream>
 #include <sstream>
@@ -25,7 +27,7 @@ struct rule {
 };
 
 struct machine {
-    std::string alphabet;
+    std::vector<std::string> alphabet;
     std::string input_syms;
     char blank_sym;
 
@@ -81,19 +83,40 @@ std::vector<std::string> tokenize(std::string file)
         buffer = "";
     }
 
+    out.push_back("EOF");
     return out;
+}
+
+template<typename ...A>
+void error(std::string fmt, ...)
+{
+    va_list va;
+    va_start(va, fmt);
+    vprintf(fmt.data(), va);
+    va_end(va);
+
+    exit(1);
 }
 
 machine parse_rules(std::string file)
 {
     std::vector<std::string> tokens = tokenize(file);
+    machine out;
 
     for (size_t i = 0; i < tokens.size();)
     {
         if (tokens[i] == "ALPHABET")
         {
+            ++i;
 
+            do {
+                if (tokens[i] == "EOF")
+                    error("Expected alphabet member, got EOF");
+
+                out.alphabet.push_back(tokens[i]);
+            } while (tokens[i++] != ";");
         }
+
     }
 }
 
