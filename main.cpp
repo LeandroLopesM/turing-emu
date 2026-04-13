@@ -28,7 +28,7 @@ struct rule {
 
 struct machine {
     std::vector<std::string> alphabet;
-    std::string input_syms;
+    std::vector<std::string> input_syms;
     char blank_sym;
 
     std::vector<int> states;
@@ -98,6 +98,17 @@ void error(std::string fmt, ...)
     exit(1);
 }
 
+void read_list(std::vector<std::string>& out, const std::vector<std::string>& tokens, size_t& offset)
+{
+
+    do {
+        if (tokens[offset] == "EOF")
+            error("Expected list item, got EOF");
+
+        out.push_back(tokens[offset]);
+    } while (tokens[offset++] != ";");
+}
+
 machine parse_rules(std::string file)
 {
     std::vector<std::string> tokens = tokenize(file);
@@ -108,13 +119,12 @@ machine parse_rules(std::string file)
         if (tokens[i] == "ALPHABET")
         {
             ++i;
-
-            do {
-                if (tokens[i] == "EOF")
-                    error("Expected alphabet member, got EOF");
-
-                out.alphabet.push_back(tokens[i]);
-            } while (tokens[i++] != ";");
+            read_list(out.alphabet, tokens, i);
+        }
+        else if(tokens[i] == "INPUTS")
+        {
+            ++i;
+            read_list(out.input_syms, tokens, i);
         }
 
     }
