@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <cstdarg>
 #include <cstdio>
 #include <fstream>
@@ -6,6 +7,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string>
+#include <unordered_map>
 #include <vector>
 
 enum direction {
@@ -19,28 +21,27 @@ struct on_state {
     enum direction move;
 };
 
-struct rule {
-    struct rule* next;
-    int c_state;
+struct in_rule {
+    std::string write;
+    direction move;
+    std::string nstate;
+};
 
-    std::vector<struct on_state> then;
+struct rule {
+    std::unordered_map<std::string, in_rule> cases;
 };
 
 struct machine {
     std::vector<std::string> alphabet;
     std::vector<std::string> input_syms;
-    char blank_sym;
+    std::string blank_sym;
 
-    std::vector<int> states;
-    int starter_state;
-    int c_state;
-    int end_state;
+    std::vector<std::string> states;
+    std::string starter_state;
+    std::string c_state;
+    std::string end_state;
 
-    std::vector<struct rule> rules;
-};
-
-enum BBStates {
-    A, B, C, HALT
+    std::unordered_map<std::string, rule> rules;
 };
 
 std::string slurp_file(char* path)
@@ -66,7 +67,7 @@ std::vector<std::string> tokenize(std::string file)
 
     for ( char c : file )
     {
-        if (c == ' ' || c == '\n' || c == '\t')
+        if (c == ' ' || c == '\n' || c == '\t' || c == ':')
         {
             if (buffer != "")
             {
@@ -93,9 +94,19 @@ void error(std::string fmt, ...)
     va_list va;
     va_start(va, fmt);
     vprintf(fmt.data(), va);
+    printf("\n");
     va_end(va);
 
     exit(1);
+}
+
+template<typename T>
+bool vec_find(const std::vector<T>& vec, const T& val)
+{
+    return std::find(
+                    vec.begin(),
+                    vec.end(),
+                    val) != vec.end();
 }
 
 void read_list(std::vector<std::string>& out, const std::vector<std::string>& tokens, size_t& offset)
@@ -107,6 +118,53 @@ void read_list(std::vector<std::string>& out, const std::vector<std::string>& to
 
         out.push_back(tokens[offset]);
     } while (tokens[offset++] != ";");
+}
+
+rule parse_rule(machine& out, const std::vector<std::string>& s, size_t& o)
+{
+    rule r;
+
+    while (s[o] != "ELUR")
+    {
+        if (s[o].rfind("CASE") == 0)
+        {
+            if (!vec_find(out.input_syms, s[++o]))
+                error("%s is not a valid input symbol", s[o].data());
+
+            auto casename = s[o];
+
+            r.cases[s[o]] = in_rule {
+
+            };
+            
+            do {
+                if (s[o] == "WRITE")
+                    r.cases[casename].write = s[++o];
+                else if(s[o] == "MOVE")
+                    r.cases[casename].move = s[++o] == "L"? L : R;   
+                else if(s[o] == "STATE")
+                {
+                    if (!vec_find(out.states, s[++o]))
+                        error("%s is not a valid state", s[o].data());
+
+                    r.cases[casename].nstate = s[o];
+                }
+                else error("Unknown token in rulelist '%s'", s[o].data());
+
+                o++;
+            } while (s[o] != ";");
+
+printf("RULE %s:\n\
+    WRITE: %s\n\
+    STATE: %s\n\
+    MOVE:  %d\n", r.cases[casename].write.data(), r.cases[casename].nstate.data(), r.cases[casename].move);
+        }
+        else error("Expected case, got %s", s[o].data());
+
+        o++;
+    }
+
+    return r;
 }
 
 machine parse_rules(std::string file)
@@ -126,8 +184,31 @@ machine parse_rules(std::string file)
             ++i;
             read_list(out.input_syms, tokens, i);
         }
-
+        else if(tokens[i] == "BLANK")
+        {
+            out.blank_sym = tokens[++i];
+        }
+        else if(tokens[i] == "STATES")
+        {
+            i++;
+            read_list(out.states, tokens, i);
+        }
+        else if(tokens[i] == "STARTS")
+        {
+            out.starter_state = tokens[++i];
+        }
+        else if(tokens[i].rfind("RULE") == 0)
+        {
+            auto statename = tokens[++i];
+            if (vec_find(out.states, statename))
+            {
+                out.rules[statename] = parse_rule(out, tokens, ++i);
+            }
+            else error("No such state %s", statename.data());
+        }
     }
+
+    return out;
 }
 
 int main(int argc, char** argv)

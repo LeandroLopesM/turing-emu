@@ -1,38 +1,36 @@
 ALPHABET 0 1;
 INPUTS 0;
-BLANK 0;
+BLANK 0
 
-STATES A B C HALT
+STATES A B C HALT;
 START A
 END HALT
 
-RULE
-    A:
-        1:
+RULE A:
+        CASE 1:
             WRITE 1
             MOVE L
-            STATE C
-        0:
+            STATE C;
+        CASE 0:
+            WRITE 1
+            MOVE R
+            STATE B;
+ELUR
+RULE B:
+        CASE 1:
             WRITE 1
             MOVE R
             STATE B
-RULE
-    B:
-        1:
-            WRITE 1
-            MOVE R
-            STATE B
-        0:
+        CASE 0:
             WRITE 1
             MOVE L
             STATE A
-RULE
-    C:
-        1:
+RULE C:
+        CASE 1:
             WRITE 1
             MOVE R
             STATE HALT
-        0:
+        CASE 0:
             WRITE 1
             MOVE L
             STATE B
