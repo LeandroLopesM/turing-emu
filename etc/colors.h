@@ -1,69 +1,68 @@
-#define Black   "\e[0;30m"
-#define Red     "\e[0;31m"
-#define Green   "\e[0;32m"
-#define Yellow  "\e[0;33m"
-#define Blue    "\e[0;34m"
-#define Purple  "\e[0;35m"
-#define Cyan    "\e[0;36m"
-#define White   "\e[0;37m"
+#ifndef COLORS_H
+#define COLORS_H
 
-#define BOLD_Black   "\e[1;30m"
-#define BOLD_Red     "\e[1;31m"
-#define BOLD_Green   "\e[1;32m"
-#define BOLD_Yellow  "\e[1;33m"
-#define BOLD_Blue    "\e[1;34m"
-#define BOLD_Purple  "\e[1;35m"
-#define BOLD_Cyan    "\e[1;36m"
-#define BOLD_White   "\e[1;37m"
+#define BLACK   "\e[0;30m"
+#define RED     "\e[0;31m"
+#define GREEN   "\e[0;32m"
+#define YELLOW  "\e[0;33m"
+#define BLUE    "\e[0;34m"
+#define PURPLE  "\e[0;35m"
+#define CYAN    "\e[0;36m"
+#define WHITE   "\e[0;37m"
 
-#define UNDERLINE_Black     "\e[4;30m"
-#define UNDERLINE_Red       "\e[4;31m"
-#define UNDERLINE_Green     "\e[4;32m"
-#define UNDERLINE_Yellow    "\e[4;33m"
-#define UNDERLINE_Blue      "\e[4;34m"
-#define UNDERLINE_Purple    "\e[4;35m"
-#define UNDERLINE_Cyan      "\e[4;36m"
-#define UNDERLINE_White     "\e[4;37m"
-Background
-Value 	Color
-#define \e[40m 	Black
-#define \e[41m 	Red
-#define \e[42m 	Green
-#define \e[43m 	Yellow
-#define \e[44m 	Blue
-#define \e[45m 	Purple
-#define \e[46m 	Cyan
-#define \e[47m 	White
-High Intensity
-Value 	Color
-\e[0;90m 	Black
-\e[0;91m 	Red
-\e[0;92m 	Green
-\e[0;93m 	Yellow
-\e[0;94m 	Blue
-\e[0;95m 	Purple
-\e[0;96m 	Cyan
-\e[0;97m 	White
-Bold High Intensity
-Value 	Color
-\e[1;90m 	Black
-\e[1;91m 	Red
-\e[1;92m 	Green
-\e[1;93m 	Yellow
-\e[1;94m 	Blue
-\e[1;95m 	Purple
-\e[1;96m 	Cyan
-\e[1;97m 	White
-High Intensity backgrounds
-Value 	Color
-\e[0;100m 	Black
-\e[0;101m 	Red
-\e[0;102m 	Green
-\e[0;103m 	Yellow
-\e[0;104m 	Blue
-\e[0;105m 	Purple
-\e[0;106m 	Cyan
-\e[0;107m 	White
-Reset
-Value 	Color
-\e[0m 	Reset
+#define BOLD_BLACK   "\e[1;30m"
+#define BOLD_RED     "\e[1;31m"
+#define BOLD_GREEN   "\e[1;32m"
+#define BOLD_YELLOW  "\e[1;33m"
+#define BOLD_BLUE    "\e[1;34m"
+#define BOLD_PURPLE  "\e[1;35m"
+#define BOLD_CYAN    "\e[1;36m"
+#define BOLD_WHITE   "\e[1;37m"
+
+#define UNDERLINE_BLACK     "\e[4;30m"
+#define UNDERLINE_RED       "\e[4;31m"
+#define UNDERLINE_GREEN     "\e[4;32m"
+#define UNDERLINE_YELLOW    "\e[4;33m"
+#define UNDERLINE_BLUE      "\e[4;34m"
+#define UNDERLINE_PURPLE    "\e[4;35m"
+#define UNDERLINE_CYAN      "\e[4;36m"
+#define UNDERLINE_WHITE     "\e[4;37m"
+
+#define	BG_BLACK   "\e[40m"
+#define	BG_RED     "\e[41m"
+#define	BG_GREEN   "\e[42m"
+#define	BG_YELLOW  "\e[43m"
+#define	BG_BLUE    "\e[44m"
+#define	BG_PURPLE  "\e[45m"
+#define	BG_CYAN    "\e[46m"
+#define	BG_WHITE   "\e[47m"
+
+#define HARD_BLACK   "\e[0;90m"
+#define HARD_RED     "\e[0;91m"
+#define HARD_GREEN   "\e[0;92m"
+#define HARD_YELLOW  "\e[0;93m"
+#define HARD_BLUE    "\e[0;94m"
+#define HARD_PURPLE  "\e[0;95m"
+#define HARD_CYAN    "\e[0;96m"
+#define HARD_WHITE   "\e[0;97m"
+
+#define BHARD_BLACK  "\e[1;90m"
+#define BHARD_RED    "\e[1;91m"
+#define BHARD_GREEN  "\e[1;92m"
+#define BHARD_YELLOW "\e[1;93m"
+#define BHARD_BLUE   "\e[1;94m"
+#define BHARD_PURPLE "\e[1;95m"
+#define BHARD_CYAN   "\e[1;96m"
+#define BHARD_WHITE  "\e[1;97m"
+
+#define BG_HARD_BLACK   "\e[0;100m"
+#define BG_HARD_RED     "\e[0;101m"
+#define BG_HARD_GREEN   "\e[0;102m"
+#define BG_HARD_YELLOW  "\e[0;103m"
+#define BG_HARD_BLUE    "\e[0;104m"
+#define BG_HARD_PURPLE  "\e[0;105m"
+#define BG_HARD_CYAN    "\e[0;106m"
+#define BG_HARD_WHITE   "\e[0;107m"
+
+#define RESET "\e[0m"
+#endif

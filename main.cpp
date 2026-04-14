@@ -67,13 +67,23 @@ std::vector<std::string> tokenize(std::string file)
 
     for ( char c : file )
     {
-        if (c == ' ' || c == '\n' || c == '\t' || c == ':')
+        if (c == ' ' || c == '\n' || c == '\t')
         {
             if (buffer != "")
             {
                 out.push_back(buffer);
                 buffer = "";
             }
+        }
+        else if (c == ';')
+        {
+            if (buffer != "")
+            {
+                out.push_back(buffer);
+                buffer = "";
+            }
+
+            out.push_back(";");
         }
         else buffer += c;
     }
@@ -111,13 +121,19 @@ bool vec_find(const std::vector<T>& vec, const T& val)
 
 void read_list(std::vector<std::string>& out, const std::vector<std::string>& tokens, size_t& offset)
 {
+    printf("Looking for list at %s\n", tokens[offset].data());
 
-    do {
+    while (tokens[offset++] != ";") {
+        printf("Member %s", tokens[offset].data());
         if (tokens[offset] == "EOF")
+        {
             error("Expected list item, got EOF");
+        }
 
         out.push_back(tokens[offset]);
-    } while (tokens[offset++] != ";");
+    }
+
+    printf ("\n");
 }
 
 rule parse_rule(machine& out, const std::vector<std::string>& s, size_t& o)
@@ -136,12 +152,12 @@ rule parse_rule(machine& out, const std::vector<std::string>& s, size_t& o)
             r.cases[s[o]] = in_rule {
 
             };
-            
+
             do {
                 if (s[o] == "WRITE")
                     r.cases[casename].write = s[++o];
                 else if(s[o] == "MOVE")
-                    r.cases[casename].move = s[++o] == "L"? L : R;   
+                    r.cases[casename].move = s[++o] == "L"? L : R;
                 else if(s[o] == "STATE")
                 {
                     if (!vec_find(out.states, s[++o]))
@@ -176,12 +192,10 @@ machine parse_rules(std::string file)
     {
         if (tokens[i] == "ALPHABET")
         {
-            ++i;
             read_list(out.alphabet, tokens, i);
         }
         else if(tokens[i] == "INPUTS")
         {
-            ++i;
             read_list(out.input_syms, tokens, i);
         }
         else if(tokens[i] == "BLANK")
@@ -190,7 +204,6 @@ machine parse_rules(std::string file)
         }
         else if(tokens[i] == "STATES")
         {
-            i++;
             read_list(out.states, tokens, i);
         }
         else if(tokens[i] == "STARTS")
@@ -206,6 +219,11 @@ machine parse_rules(std::string file)
             }
             else error("No such state %s", statename.data());
         }
+        else if(tokens[i] == "BLANK")
+        {
+            out.blank_sym = tokens[++i];
+        }
+        else error("Unknown token %s", tokens[i].data());
     }
 
     return out;
