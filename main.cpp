@@ -197,6 +197,7 @@ machine parse_rules(std::string file)
         else if(tokens[i] == "INPUTS")
         {
             read_list(out.input_syms, tokens, i);
+            --i;
         }
         else if(tokens[i] == "BLANK")
         {
